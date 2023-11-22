@@ -21,6 +21,11 @@ offset = args.offset
 
 strs = []
 
+type_size = {
+    "DWORD": 4,
+    "WORD": 2,
+}
+
 for s in args.str:
     strs.append(decode_escape(s))
 
@@ -30,10 +35,13 @@ for s in strs:
     print(f"; `{encode_escape(s)}`")
 
     for chunk in chunks:
+        type = "DWORD"
+        if len(chunk) == 1:
+            type = "WORD"
         chunk = encode_escape(chunk)
-        print(f"mov [{args.base}{args.offset_op}{offset}], DWORD `{chunk}`")
-        offset += 4
+        print(f"mov [{args.base}{args.offset_op}{offset}], {type} `{chunk}`")
+        offset += type_size[type]
 
     if len(chunks[-1]) == 4: # null terminate
-        print(f"mov [{args.base}{args.offset_op}{offset}], DWORD 0")
-        offset += 4
+        print(f"mov [{args.base}{args.offset_op}{offset}], WORD 0")
+        offset += type_size["WORD"]
