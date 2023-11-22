@@ -1,5 +1,5 @@
-; nasm shellcode.asm
-; nc pwnable.kr 9026 < shellcode
+; nasm payload.asm
+; nc pwnable.kr 9026 < payload
 
 %include "../syscall_macros.asm"
 
